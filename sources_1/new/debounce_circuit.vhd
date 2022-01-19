@@ -59,7 +59,7 @@ begin
    
   
    
-   process(state_reg,q_reg,sw,q_next)
+   process(state_reg,q_reg,sw,q_next,clk)
    begin
     state_next <= state_reg;
     q_next <= q_reg;

@@ -39,21 +39,22 @@ entity top_sys is
         lcd_rs : out std_logic;
         lcd_rw : out std_logic;
         lcd_db : out std_logic_vector(7 downto 4);
-        start: in std_logic );
+        start: in std_logic;
+        s: out std_logic_vector(3 downto 0) );
 end top_sys;
 
 architecture Behavioral of top_sys is
 
 --keypad Ports
 signal flagNewChar : std_logic;
-signal key_char: std_logic_vector(7 downto 0);
+signal key_char: std_logic_vector(7 downto 0) := x"00";
 
 --LCD ports
 constant CLK_PERIOD_NS : positive := 8;  -- 125 Mhz  generic Frecuency
 signal line1_buffer : std_logic_vector(127 downto 0);
 signal line2_buffer : std_logic_vector(127 downto 0);
 
-signal password: std_logic_vector(7 downto 0) := x"30303030";
+signal password: std_logic_vector(31 downto 0) := x"30303030";
 
 begin
 
@@ -76,5 +77,11 @@ port map (
       lcd_db       => lcd_db,
       line1_buffer => line1_buffer,
       line2_buffer => line2_buffer);
+
+s(3) <= key_char(3);
+s(2) <= key_char(2);
+s(1) <= key_char(1);
+s(0) <= key_char(0);
+
 
 end Behavioral;
