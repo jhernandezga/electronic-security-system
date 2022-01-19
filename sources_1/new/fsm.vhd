@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity fsm is
- generic(attempts: integer := 3);
+ generic(attempts: integer := 4);
   Port (clk: in std_logic;
         rst: in std_logic;
         in_char: in std_logic_vector(7 downto 0);
@@ -82,18 +82,17 @@ begin
 case state_reg is
 
 when start =>
-    line1_buff <= x"4269656E76656E69644020202020200A";
+    line1_buff <= x"4269656E76656E696440202020202020";
     line2_buff <= x"70726573696F6E652027737461727427";
     if start_bt = '1' then
-        state_next <= typing;
         line2_buff <= x"2020202020202020202020202020203E";
+        state_next <= typing;
     end if;
 when typing =>
     line1_buff <= x"496E6772657365206C6120636C617665";
     if flag_char ='1' and  right_pass /= '1' and  wrong_pass /= '1' then
         line2_buff <= line2_buff(119 downto 0) & in_char; 
     end if;
-    
     if right_pass = '1' then
         state_next <= open_d;
     elsif wrong_pass = '1' then
@@ -108,7 +107,7 @@ when typing =>
     
 when w_msg =>
     line1_buff <= x"636C61766520696E636F727265637461";
-      line2_buff <= x"2020202020202020202020202020203E";
+     line2_buff <= x"2020202020202020202020202020203E";
     if flag_char = '1' then
         state_next <= typing;
     end if;
