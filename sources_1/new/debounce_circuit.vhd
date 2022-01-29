@@ -39,64 +39,44 @@ end debounce_circuit;
 
 architecture Behavioral of debounce_circuit is
   
-constant  N:integer := 12 ;   -- filter of 2^N*8ns = 40ms --22 sintesis,12 simulación 
-type  state_type is ( zero, wait0, one, wait1);  
+type  state_type is ( no_funcionando, funcionando);  
 signal state_reg,state_next: state_type;  
-signal q_reg, q_next: unsigned(N-1 downto 0);
+signal q_reg, q_next: integer:=0;
 
 begin
    
    process(clk,reset)
    begin
     if reset = '1' then
-        state_reg <= zero;
-        q_reg <= (others => '0');
+        q_reg <= 0;
+        --db_tick<='0';
     elsif rising_edge(clk) then
-        state_reg <= state_next;
         q_reg <= q_next;
     end if;
    end process;
    
-  
-   
-   process(state_reg,q_reg,sw,q_next,clk)
+  process(sw)
    begin
-    state_next <= state_reg;
-    q_next <= q_reg;
-    db_tick <= '0';
+    if rising_edge(sw) then
+        state_reg <= funcionando;
+    end if;
+        if falling_edge (sw) then
+        state_reg<=no_funcionando;
+    end if;
+   end process;
+   
+   process(clk)
+   begin
     case state_reg is
-        when zero =>
-            db_level <= '0';
-            if (sw = '1') then
-                state_next <= wait1;
-                q_next <= (others => '1');
-            end if;
-        when wait1 =>
-            db_level <= '0';
-            if(sw = '1') then
-                q_next <= q_reg -1;
-                if(q_next = 0) then
-                    state_next <= one;
-                    db_tick <= '1';
-                end if;
-            else --sw='0'
-                state_next <= zero;
-                end if;
-        when one =>
-            db_level <= '1';
-            if(sw = '0') then
-                state_next <= wait0;
-                q_next <= (others => '1');
-            end if;
-        when wait0 =>
-            db_level <= '1';
-            if(sw = '0') then
-                q_next <= q_reg -1;
-                if(q_next = 0) then
-                    state_next <= zero;
-                end if;
-            else --sw=0
-                state_next <= one;
+        when no_funcionando =>
+            db_tick<= '0';
+            q_next<=0;
+        when funcionando =>
+            q_next <= q_next+1;
+            if (q_next=0) then
+            db_tick<='1';
+            elsif(q_next > 1) then
+                db_tick<= '0';
             end if;
         end case;                
    end process;

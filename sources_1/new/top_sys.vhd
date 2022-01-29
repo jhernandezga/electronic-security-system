@@ -46,8 +46,8 @@ end top_sys;
 architecture Behavioral of top_sys is
 
 --keypad Ports
-signal flagNewChar : std_logic;
-signal key_char: std_logic_vector(7 downto 0) := x"00";
+signal flag : std_logic;
+signal key_char: std_logic_vector(7 downto 0);
 
 --LCD ports
 constant CLK_PERIOD_NS : positive := 8;  -- 125 Mhz  generic Frecuency
@@ -59,11 +59,11 @@ signal password: std_logic_vector(31 downto 0) := x"30303030";
 begin
 
 FSM_A: entity work.fsm(Behavioral)
-port map(clk => clk, rst => rst,start_bt => start,flag_char =>flagNewChar,in_char => key_char,
+port map(clk => clk, rst => rst,start_bt => start,flag_char =>flag,in_char => key_char,
         line1 => line1_buffer, line2 => line2_buffer, password => password );
 
 keypadMat: entity work.keypad_top(Behavioral)
-port map(clk => clk, rst => rst,columns => columns, rows => rows, flagNewChar => flagNewChar,
+port map(clk => clk, rst => rst,columns => columns, rows => rows, flagNewChar => flag,
 key_out => key_char);
 
 LCD_162 : entity work.lcd16x2_ctrl
@@ -77,7 +77,7 @@ port map (
       lcd_db       => lcd_db,
       line1_buffer => line1_buffer,
       line2_buffer => line2_buffer);
-
+      
 s(3) <= key_char(3);
 s(2) <= key_char(2);
 s(1) <= key_char(1);

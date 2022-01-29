@@ -134,7 +134,24 @@ WITH FILA SELECT
 PROCESS(CLK,BANDERA)
 BEGIN
 	IF RISING_EDGE(CLK) AND BANDERA = '1' THEN
-		IF FILA_REG_S = "1000" THEN --PRIMERA FILA DE BOTONES
+	    IF COLUMNAS = "0000" THEN
+	          REG_B1 <= (others => '0');
+	          REG_B2 <= (others => '0');
+	          REG_B3 <= (others => '0');
+	          REG_B4 <= (others => '0');
+	          REG_B5 <= (others => '0');
+	          REG_B6 <= (others => '0');
+	          REG_B7 <= (others => '0');
+	          REG_B8 <= (others => '0');
+	          REG_B9 <= (others => '0');
+	          REG_B0 <= (others => '0');
+	          REG_A <= (others => '0');
+	          REG_B <= (others => '0');
+	          REG_C <= (others => '0');
+	          REG_D <= (others => '0');
+	          REG_BGA <= (others => '0');
+	          REG_BAS <= (others => '0');
+		ELSIF FILA_REG_S = "1000" THEN --PRIMERA FILA DE BOTONES
 			REG_B1 <= REG_B1(6 DOWNTO 0)&COLUMNAS(3);
 			REG_B2 <= REG_B2(6 DOWNTO 0)&COLUMNAS(2);
 			REG_B3 <= REG_B3(6 DOWNTO 0)&COLUMNAS(1);
@@ -176,7 +193,7 @@ BEGIN
 		ELSIF	REG_A 	= "11111111" THEN BOTON_PRES <= X"41"; IND_S <= '1';
 		ELSIF	REG_B 	= "11111111" THEN BOTON_PRES <= X"42"; IND_S <= '1';
 		ELSIF	REG_C 	= "11111111" THEN BOTON_PRES <= X"43"; IND_S <= '1';
-		ELSIF	REG_D 	= "11111111" THEN BOTON_PRES <= X"44"; IND_S <= '1';
+		ELSIF	REG_D 	= "11111111" THEN BOTON_PRES <= X"44"; IND_S <= '1'; 
 		ELSIF	REG_BAS 	= "11111111" THEN BOTON_PRES <= X"2A"; IND_S <= '1';
 		ELSIF	REG_BGA 	= "11111111" THEN BOTON_PRES <= X"23"; IND_S <= '1';
 		ELSE IND_S <= '0';

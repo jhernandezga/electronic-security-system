@@ -50,6 +50,7 @@ signal count: integer range 0 to N_CHAR := 0;
 signal key_in: std_logic_vector(7 downto 0);
 signal state_reg,state_next: states_k;
 signal out_buffer: std_logic_vector(8*N_CHAR-1 downto 0) := (others => '0');
+signal out_buffer_next: std_logic_vector(8*N_CHAR-1 downto 0) := (others => '0');
 
 
 begin
@@ -61,6 +62,8 @@ if rst = '1' then
     state_reg <= start;
 elsif rising_edge(clk) and en = '1' then
     state_reg <= state_next;
+    out_buffer <= out_buffer_next;
+    key_in <= in_data;
 end if;
 end process;
 
@@ -70,7 +73,7 @@ right_pass <= '0';
 wrong_pass <= '0';
 case state_reg is
     when start =>
-        out_buffer <= (others => '0');
+        out_buffer_next <= (others => '0');
         if flagIn = '1' then
             state_next <= concatenation;
         end if; 
@@ -78,7 +81,7 @@ case state_reg is
          if flagIn = '1' then
             count <= count + 1;
             if count < N_CHAR then
-                out_buffer <= in_data & out_buffer(8*N_CHAR-1 downto 8);
+                out_buffer_next <= out_buffer_next(8*N_CHAR-9 downto 0) & key_in;
             else 
                 count <= 0;
                 state_next <= del;
