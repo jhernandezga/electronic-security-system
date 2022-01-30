@@ -40,7 +40,8 @@ entity fsm is
         line1: out std_logic_vector(127 downto 0);
         line2: out std_logic_vector(127 downto 0);
         start_bt: in std_logic;
-        password: in std_logic_vector(31 downto 0));
+        password: in std_logic_vector(31 downto 0);
+        buzzer: out std_logic);
 end fsm;
 
 architecture Behavioral of fsm is
@@ -129,11 +130,14 @@ begin
 
 case state_reg is
     when start =>
+        buzzer <= '0';
         line1_buff <= x"4269656E76656E696440202020202020";
         line2_buff <= x"70726573696F6E652027737461727427";
         en_next <= '0';
         
     when typing =>
+    
+        buzzer <= '0';
     
         line1_buff <= x"496E6772657365206C6120636C617665";
         en_next <= '1';
@@ -167,6 +171,7 @@ case state_reg is
         
     when alert_protocol =>
         en_next <= '0'; 
+        buzzer <= '1';
         line1_buff <= x"416C6572746121212020202020202020";
         line2_buff <= x"446573626C6F7175656F20424C544820";
 end case;

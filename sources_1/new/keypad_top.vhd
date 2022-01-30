@@ -34,6 +34,7 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity keypad_top is
+  generic(FREQ_CLK: integer := 125000000);
   Port (clk : in std_logic;
         rst: in std_logic;
         flagNewChar: out std_logic;
@@ -50,6 +51,7 @@ signal flag: std_logic := '0';
 begin
 
 keypad1: entity work.KEYPAD(Behavioral)
+generic map(FREQ_CLK => FREQ_CLK)
 port map(clk => clk,COLUMNAS => columns, FILAS => rows,IND => flag,BOTON_PRES => key_out);
 
 deb: entity work.debounce_circuit(Behavioral)
