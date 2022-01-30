@@ -81,49 +81,24 @@ end process;
 --next state logic
 
 process(state_reg,start_bt,flag_char,right_pass,wrong_pass)
-variable count_LCD_char: integer range 0 to 4:= 0;
+
 begin
 
 case state_reg is
 
 when start =>
-    line1_buff <= x"4269656E76656E696440202020202020";
-    line2_buff <= x"70726573696F6E652027737461727427";
-    en_next <= '0';
     count_attempts <= 0;
     if start_bt = '1' then
         state_next <= typing;
-        line2_buff <= x"3E202020202020202020202020202020";
     else
         state_next <= start;    
     end if;
 when typing =>
-    line1_buff <= x"496E6772657365206C6120636C617665";
-    en_next <= '1';
---    if flag_char ='1' and  right_pass /= '1' and  wrong_pass /= '1' then
---        line2_buff <= line2_buff(119 downto 0) & in_char; 
---    end if;
-    
-    if flag_char ='1' and  right_pass /= '1' and  wrong_pass /= '1' then
-        count_LCD_char := count_LCD_char +1;
-        if count_LCD_char = 1 then
-            line2_buff(119 downto 112) <= in_char;
-        elsif count_LCD_char = 2 then
-            line2_buff(111 downto 104) <= in_char;
-        elsif count_LCD_char = 3 then
-           line2_buff(103 downto 96) <= in_char;
-        elsif count_LCD_char = 4 then
-            line2_buff(95 downto 88) <= in_char;
-        end if;
         
-    end if;
-    
     if right_pass = '1' then
         state_next <= open_d;
-        count_LCD_char := 0;
         count_attempts <= 0;
     elsif wrong_pass = '1' then
-        count_LCD_char := 0;
         count_attempts <= count_attempts +1;
         if count_attempts <= attempts then
             state_next <= w_msg;
@@ -134,23 +109,69 @@ when typing =>
     end if;
     
 when w_msg =>
-    line1_buff <= x"636C61766520696E636F727265637461";
-      line2_buff <= x"3E202020202020202020202020202020";
     if flag_char = '1' then
         state_next <= typing;
     end if;
 when open_d =>
-    en_next <= '0';
-    line1_buff <= x"436C61766520636F7272656374612020";
-    line2_buff <= x"61627269656E646F2E2E2E2020202020";
-    
+       
 when alert_protocol =>
-    en_next <= '0'; 
-    line1_buff <= x"416C6572746121212020202020202020";
-    line2_buff <= x"446573626C6F7175656F20424C544820"; 
-    
+        
 end case;
 
 end process;
+
+
+---output logic
+
+process(state_reg,right_pass,wrong_pass,flag_char)
+variable count_LCD_char: integer range 0 to 4:= 0;
+begin
+
+case state_reg is
+    when start =>
+        line1_buff <= x"4269656E76656E696440202020202020";
+        line2_buff <= x"70726573696F6E652027737461727427";
+        en_next <= '0';
+        
+    when typing =>
+    
+        line1_buff <= x"496E6772657365206C6120636C617665";
+        en_next <= '1';
+        if count_LCD_char = 0 then
+            line2_buff <= x"3E202020202020202020202020202020";
+        end if;
+        
+        if flag_char ='1' and  right_pass /= '1' and  wrong_pass /= '1' then
+        count_LCD_char := count_LCD_char +1;
+            if count_LCD_char = 1 then
+                line2_buff(119 downto 112) <= in_char;
+            elsif count_LCD_char = 2 then
+                line2_buff(111 downto 104) <= in_char;
+            elsif count_LCD_char = 3 then
+                line2_buff(103 downto 96) <= in_char;
+            elsif count_LCD_char = 4 then
+                line2_buff(95 downto 88) <= in_char;
+            end if;
+        end if;
+        
+     when w_msg =>
+        count_LCD_char := 0;
+        line1_buff <= x"636C61766520696E636F727265637461";
+        line2_buff <= x"3E202020202020202020202020202020";
+            
+    when open_d =>
+        count_LCD_char := 0;
+        en_next <= '0';
+        line1_buff <= x"436C61766520636F7272656374612020";
+        line2_buff <= x"61627269656E646F2E2E2E2020202020";              
+        
+    when alert_protocol =>
+        en_next <= '0'; 
+        line1_buff <= x"416C6572746121212020202020202020";
+        line2_buff <= x"446573626C6F7175656F20424C544820";
+end case;
+end process;
+
+
 
 end Behavioral;
