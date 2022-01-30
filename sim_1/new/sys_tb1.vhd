@@ -499,6 +499,9 @@ wait for 3750*T;
 columns<="0100";
 wait for 1250*T;
 
+rst <= '1';
+wait for 3*T;
+rst <= '0';
 
 
 end process;

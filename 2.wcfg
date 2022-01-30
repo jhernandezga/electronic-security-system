@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="top_sys_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="top_sys_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000000 ms"></ZoomStartTime>
+      <ZoomEndTime time="291.000000001 ms"></ZoomEndTime>
+      <Cursor1Time time="42.656848741 ms"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="192"></NameColumnWidth>
+      <ValueColumnWidth column_width="89"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="22" />
+   <wvobject fp_name="/top_sys_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/lcd_db" type="array">
+      <obj_property name="ElementShortName">lcd_db[7:4]</obj_property>
+      <obj_property name="ObjectShortName">lcd_db[7:4]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/start" type="logic">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/state_reg" type="other">
+      <obj_property name="ElementShortName">state_reg</obj_property>
+      <obj_property name="ObjectShortName">state_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/count_attempts" type="other">
+      <obj_property name="ElementShortName">count_attempts</obj_property>
+      <obj_property name="ObjectShortName">count_attempts</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/right_pass" type="logic">
+      <obj_property name="ElementShortName">right_pass</obj_property>
+      <obj_property name="ObjectShortName">right_pass</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/wrong_pass" type="logic">
+      <obj_property name="ElementShortName">wrong_pass</obj_property>
+      <obj_property name="ObjectShortName">wrong_pass</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/columns" type="array">
+      <obj_property name="ElementShortName">columns[3:0]</obj_property>
+      <obj_property name="ObjectShortName">columns[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/rows" type="array">
+      <obj_property name="ElementShortName">rows[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rows[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/flagNewChar" type="logic">
+      <obj_property name="ElementShortName">flagNewChar</obj_property>
+      <obj_property name="ObjectShortName">flagNewChar</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/deb/db_tick" type="logic">
+      <obj_property name="ElementShortName">db_tick</obj_property>
+      <obj_property name="ObjectShortName">db_tick</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/LCD_162/line1_buffer" type="array">
+      <obj_property name="ElementShortName">line1_buffer[127:0]</obj_property>
+      <obj_property name="ObjectShortName">line1_buffer[127:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/LCD_162/line2_buffer" type="array">
+      <obj_property name="ElementShortName">line2_buffer[127:0]</obj_property>
+      <obj_property name="ObjectShortName">line2_buffer[127:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/pass_man/state_reg" type="other">
+      <obj_property name="ElementShortName">state_reg</obj_property>
+      <obj_property name="ObjectShortName">state_reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/pass_man/key_in" type="array">
+      <obj_property name="ElementShortName">key_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">key_in[7:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/key_out" type="array">
+      <obj_property name="ElementShortName">key_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">key_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/FSM_A/pass_man/out_buffer" type="array">
+      <obj_property name="ElementShortName">out_buffer[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_buffer[31:0]</obj_property>
+      <obj_property name="Radix">ASCIIRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/keypad1/REG_B1" type="array">
+      <obj_property name="ElementShortName">REG_B1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">REG_B1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/keypad1/REG_BAS" type="array">
+      <obj_property name="ElementShortName">REG_BAS[7:0]</obj_property>
+      <obj_property name="ObjectShortName">REG_BAS[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/keypad1/BANDERA" type="logic">
+      <obj_property name="ElementShortName">BANDERA</obj_property>
+      <obj_property name="ObjectShortName">BANDERA</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_sys_tb/UTT/keypadMat/keypad1/BANDERA2" type="logic">
+      <obj_property name="ElementShortName">BANDERA2</obj_property>
+      <obj_property name="ObjectShortName">BANDERA2</obj_property>
+   </wvobject>
+</wave_config>

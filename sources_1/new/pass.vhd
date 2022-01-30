@@ -74,6 +74,7 @@ wrong_pass <= '0';
 case state_reg is
     when start =>
         out_buffer_next <= (others => '0');
+        count <= 0;
         if flagIn = '1' then
             state_next <= concatenation;
         end if; 
