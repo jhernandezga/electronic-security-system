@@ -34,7 +34,7 @@ use ieee.numeric_std.all;
 
 entity debounce_circuit is
   Port (clk, reset,sw: in std_logic;
-        db_tick,db_level: out std_logic );
+        db_tick: out std_logic );
 end debounce_circuit;
 
 architecture Behavioral of debounce_circuit is

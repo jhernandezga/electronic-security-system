@@ -32,7 +32,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity fsm is
- generic(attempts: integer := 3);
+ generic(attempts: integer := 3;
+         UART_KEY: std_logic_vector(7 downto 0) := x"30");
   Port (clk: in std_logic;
         rst: in std_logic;
         in_char: in std_logic_vector(7 downto 0);
@@ -41,7 +42,11 @@ entity fsm is
         line2: out std_logic_vector(127 downto 0);
         start_bt: in std_logic;
         password: in std_logic_vector(31 downto 0);
-        buzzer: out std_logic);
+        buzzer: out std_logic;
+        rd_uart, wr_uart: out std_logic;
+        empty_uart: in std_logic;
+        get_data_uart: in std_logic_vector(7 downto 0);
+        send_data_uart: out std_logic_vector(7 downto 0));
 end fsm;
 
 architecture Behavioral of fsm is
@@ -58,11 +63,23 @@ signal count_attempts_next: integer range 0 to 5 := 0;
 type states_k is (start,typing,open_d,w_msg,alert_protocol);
 signal state_reg,state_next: states_k;
 
+signal right_pass_uart: std_logic := '0';
+signal send_uart: std_logic := '0'; 
+
 begin
 
+-- pass -key verification
 pass_man: entity work.pass(Behavioral)
 port map(clk => clk, rst => rst,password => password,in_data =>in_char,
 flagIn => flag_char,right_pass => right_pass_next,wrong_pass => wrong_pass_next,en => en_next); 
+
+uart_coupling: entity work.uart_key(Behavioral)
+generic map( UART_KEY => UART_KEY)
+port map(clk => clk, empty_uart => empty_uart, clear => rd_uart, get_data_uart => get_data_uart,
+         right_key => right_pass_uart);
+
+tick_gen1: entity work.debounce_circuit(Behavioral)
+port map(clk => clk, reset => rst, sw => send_uart, db_tick => wr_uart);
 
 --reg
 process(clk)
@@ -81,7 +98,7 @@ end process;
 
 --next state logic
 
-process(state_reg,start_bt,flag_char,right_pass,wrong_pass)
+process(state_reg,start_bt,flag_char,right_pass,wrong_pass,right_pass_uart)
 
 begin
 
@@ -96,7 +113,7 @@ when start =>
     end if;
 when typing =>
         
-    if right_pass = '1' then
+    if right_pass = '1'  or right_pass_uart = '1' then
         state_next <= open_d;
         count_attempts <= 0;
     elsif wrong_pass = '1' then
@@ -116,7 +133,9 @@ when w_msg =>
 when open_d =>
        
 when alert_protocol =>
-        
+     if right_pass_uart = '1' then
+        state_next <= open_d;
+     end if;  
 end case;
 
 end process;
@@ -130,12 +149,14 @@ begin
 
 case state_reg is
     when start =>
+        send_uart <= '0';
         buzzer <= '0';
         line1_buff <= x"4269656E76656E696440202020202020";
         line2_buff <= x"70726573696F6E652027737461727427";
         en_next <= '0';
         
     when typing =>
+        send_uart <= '0';
     
         buzzer <= '0';
     
@@ -164,6 +185,7 @@ case state_reg is
         line2_buff <= x"3E202020202020202020202020202020";
             
     when open_d =>
+        send_uart <= '0';
         count_LCD_char := 0;
         en_next <= '0';
         line1_buff <= x"436C61766520636F7272656374612020";
@@ -172,6 +194,8 @@ case state_reg is
     when alert_protocol =>
         en_next <= '0'; 
         buzzer <= '1';
+        send_data_uart <= x"30";
+        send_uart <= '1'; 
         line1_buff <= x"416C6572746121212020202020202020";
         line2_buff <= x"446573626C6F7175656F20424C544820";
 end case;

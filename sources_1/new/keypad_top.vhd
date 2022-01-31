@@ -55,6 +55,6 @@ generic map(FREQ_CLK => FREQ_CLK)
 port map(clk => clk,COLUMNAS => columns, FILAS => rows,IND => flag,BOTON_PRES => key_out);
 
 deb: entity work.debounce_circuit(Behavioral)
-port map(clk => clk, reset => rst, sw => flag, db_level => open, db_tick => flagNewChar);
+port map(clk => clk, reset => rst, sw => flag, db_tick => flagNewChar);
 
 end Behavioral;

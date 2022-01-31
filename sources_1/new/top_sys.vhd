@@ -41,7 +41,9 @@ entity top_sys is
         lcd_db : out std_logic_vector(7 downto 4);
         start: in std_logic;
         s: out std_logic_vector(3 downto 0);
-        wave_alert: out std_logic );
+        wave_alert: out std_logic;
+        rx: in std_logic;
+        tx: out std_logic );
 end top_sys;
 
 architecture Behavioral of top_sys is
@@ -64,16 +66,28 @@ signal password: std_logic_vector(31 downto 0) := x"30303030";
 
 signal buzzer_enable: std_logic;
 
+signal rd_uart, wr_uart: std_logic;
+signal w_data, r_data : std_logic_vector(7 downto 0);
+signal rx_empty: std_logic;
+
+
 begin
 
 FSM_A: entity work.fsm(Behavioral)
 port map(clk => clk, rst => rst,start_bt => start,flag_char =>flag,in_char => key_char,
-        line1 => line1_buffer, line2 => line2_buffer, password => password, buzzer => buzzer_enable );
+        line1 => line1_buffer, line2 => line2_buffer, password => password, buzzer => buzzer_enable,
+        rd_uart => rd_uart, wr_uart => wr_uart, empty_uart => rx_empty, get_data_uart => r_data,
+        send_data_uart => w_data );
 
 keypadMat: entity work.keypad_top(Behavioral)
 generic map(FREQ_CLK => CLK_FREQ)
 port map(clk => clk, rst => rst,columns => columns, rows => rows, flagNewChar => flag,
 key_out => key_char);
+
+UART1: entity work.uart(str_Behavioral)
+generic map( FIFO_W => 1)
+port map(clk => clk, reset => rst, rd_uart => rd_uart, wr_uart => wr_uart, w_data => w_data, r_data => r_data,
+         rx_empty => rx_empty, rx => rx, tx => tx);
 
 LCD_162 : entity work.lcd16x2_ctrl
 generic map ( CLK_PERIOD_NS => CLK_PERIOD_NS)
