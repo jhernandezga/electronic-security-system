@@ -30,12 +30,25 @@ set_property -dict { PACKAGE_PIN Y14   IOSTANDARD LVCMOS33     } [get_ports { co
 set_property -dict { PACKAGE_PIN T12   IOSTANDARD LVCMOS33     } [get_ports { columns[1] }]; #IO_L2P_T0_34 Sch=jc_p[4]              
 set_property -dict { PACKAGE_PIN U12   IOSTANDARD LVCMOS33     } [get_ports { columns[0] }]; #IO_L2N_T0_34 Sch=jc_n[4]
 
+
+
+##Pmod Header JE                                                                                                                  
+set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { rx }]; #IO_L4P_T0_34 Sch=je[1]						 
+set_property -dict { PACKAGE_PIN W16   IOSTANDARD LVCMOS33 } [get_ports { tx }]; #IO_L18N_T2_34 Sch=je[2]                     
+set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { wave_alert }]; #IO_25_35 Sch=je[3]                          
+#set_property -dict { PACKAGE_PIN H15   IOSTANDARD LVCMOS33 } [get_ports { je[3] }]; #IO_L19P_T3_35 Sch=je[4]                     
+set_property -dict { PACKAGE_PIN V13   IOSTANDARD LVCMOS33 } [get_ports { motor_out[0] }]; #IO_L3N_T0_DQS_34 Sch=je[7]                  
+set_property -dict { PACKAGE_PIN U17   IOSTANDARD LVCMOS33 } [get_ports { motor_out[1] }]; #IO_L9N_T1_DQS_34 Sch=je[8]                  
+set_property -dict { PACKAGE_PIN T17   IOSTANDARD LVCMOS33 } [get_ports { motor_out[2] }]; #IO_L20P_T3_34 Sch=je[9]                     
+set_property -dict { PACKAGE_PIN Y17   IOSTANDARD LVCMOS33 } [get_ports { motor_out[3] }]; #IO_L7N_T1_34 Sch=je[10]
 ##LEDs
 set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { s[0] }]; #IO_L23P_T3_35 Sch=led[0]
 set_property -dict { PACKAGE_PIN M15   IOSTANDARD LVCMOS33 } [get_ports { s[1] }]; #IO_L23N_T3_35 Sch=led[1]
 set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports { s[2] }]; #IO_0_35 Sch=led[2]
 set_property -dict { PACKAGE_PIN D18   IOSTANDARD LVCMOS33 } [get_ports { s[3] }]; #IO_L3N_T0_DQS_AD1N_35 Sch=led[3]
 
+##RGB LED 6
+set_property -dict { PACKAGE_PIN V16   IOSTANDARD LVCMOS33 } [get_ports { fl }]; #IO_L18P_T2_34 Sch=led6_r
 
 
 

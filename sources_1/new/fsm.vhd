@@ -46,7 +46,8 @@ entity fsm is
         rd_uart, wr_uart: out std_logic;
         empty_uart: in std_logic;
         get_data_uart: in std_logic_vector(7 downto 0);
-        send_data_uart: out std_logic_vector(7 downto 0));
+        send_data_uart: out std_logic_vector(7 downto 0);
+        en_motor: out std_logic);
 end fsm;
 
 architecture Behavioral of fsm is
@@ -65,6 +66,10 @@ signal state_reg,state_next: states_k;
 
 signal right_pass_uart: std_logic := '0';
 signal send_uart: std_logic := '0'; 
+
+signal en_motor_n: std_logic := '0';
+signal wait_motor: integer := 125000000*3;
+signal flag_motor: std_logic := '0';
 
 begin
 
@@ -93,14 +98,30 @@ elsif rising_edge(clk) then
     right_pass <= right_pass_next;
     wrong_pass <= wrong_pass_next;
     en <= en_next;
+    en_motor <= en_motor_n;
 end if;
 end process;
 
+
+
+
+
+
+
+
+
+
+
+
 --next state logic
 
-process(state_reg,start_bt,flag_char,right_pass,wrong_pass,right_pass_uart)
+process(state_reg,start_bt,flag_char,right_pass,wrong_pass,right_pass_uart,flag_motor)
 
 begin
+state_next <= state_reg;
+--right_pass_next <= right_pass;
+--wrong_pass_next <= wrong_pass;
+--en_next <= en;
 
 case state_reg is
 
@@ -120,10 +141,11 @@ when typing =>
         count_attempts <= count_attempts +1;
         if count_attempts <= attempts then
             state_next <= w_msg;
+            --state_next <= typing;
         else
             state_next <= alert_protocol;
-        end if;         
-        
+        end if;
+     else            
     end if;
     
 when w_msg =>
@@ -131,7 +153,9 @@ when w_msg =>
         state_next <= typing;
     end if;
 when open_d =>
-       
+       if flag_motor = '1' then
+          state_next <= typing;
+       end if;
 when alert_protocol =>
      if right_pass_uart = '1' then
         state_next <= open_d;
@@ -143,7 +167,7 @@ end process;
 
 ---output logic
 
-process(state_reg,right_pass,wrong_pass,flag_char)
+process(state_reg,right_pass,wrong_pass,flag_char, flag_motor)
 variable count_LCD_char: integer range 0 to 4:= 0;
 begin
 
@@ -156,6 +180,7 @@ case state_reg is
         en_next <= '0';
         
     when typing =>
+        en_motor_n <= '0';
         send_uart <= '0';
     
         buzzer <= '0';
@@ -167,6 +192,8 @@ case state_reg is
         end if;
         
         if flag_char ='1' and  right_pass /= '1' and  wrong_pass /= '1' then
+        --if flag_char ='1' then  
+          
         count_LCD_char := count_LCD_char +1;
             if count_LCD_char = 1 then
                 line2_buff(119 downto 112) <= in_char;
@@ -189,7 +216,14 @@ case state_reg is
         count_LCD_char := 0;
         en_next <= '0';
         line1_buff <= x"436C61766520636F7272656374612020";
-        line2_buff <= x"61627269656E646F2E2E2E2020202020";              
+        line2_buff <= x"61627269656E646F2E2E2E2020202020"; 
+        
+        en_motor_n <= '1';
+        
+        if flag_motor = '1' then
+            en_motor_n <= '0';
+        end if;
+                     
         
     when alert_protocol =>
         en_next <= '0'; 
@@ -201,6 +235,26 @@ case state_reg is
 end case;
 end process;
 
+
+--motor counter
+process(clk, en_motor_n)
+
+variable count_m: integer := 0;
+begin
+    if rising_edge(clk) then
+      if en_motor_n = '1' then
+        if count_m = wait_motor then
+            flag_motor <= '1';
+            count_m := 0;
+        else
+            count_m := count_m +1;
+            flag_motor <= '0';
+        end if;
+      else
+         flag_motor <= '0'; 
+       end if;           
+    end if;
+end process;
 
 
 end Behavioral;

@@ -40,7 +40,8 @@ entity keypad_top is
         flagNewChar: out std_logic;
         key_out: out std_logic_vector(7 downto 0);
         columns: in std_logic_vector(3 downto 0);
-        rows: out std_logic_vector(3 downto 0) );
+        rows: out std_logic_vector(3 downto 0);
+        t: out std_logic  );
 end keypad_top;
 
 architecture Behavioral of keypad_top is
@@ -56,5 +57,7 @@ port map(clk => clk,COLUMNAS => columns, FILAS => rows,IND => flag,BOTON_PRES =>
 
 deb: entity work.debounce_circuit(Behavioral)
 port map(clk => clk, reset => rst, sw => flag, db_tick => flagNewChar);
+
+t <= flag;
 
 end Behavioral;

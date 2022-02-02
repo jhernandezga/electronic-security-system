@@ -43,7 +43,9 @@ entity top_sys is
         s: out std_logic_vector(3 downto 0);
         wave_alert: out std_logic;
         rx: in std_logic;
-        tx: out std_logic );
+        tx: out std_logic;
+        fl: out std_logic;
+        motor_out: out std_logic_vector(3 downto 0) );
 end top_sys;
 
 architecture Behavioral of top_sys is
@@ -54,7 +56,7 @@ signal key_char: std_logic_vector(7 downto 0);
 
 --LCD ports
   -- 125 Mhz  generic Frecuency
-constant CLK_FREQ: integer := 125000;
+constant CLK_FREQ: integer := 125000000;
 constant ALERT_FREQ: integer := 2000;
 constant CLK_PERIOD_NS : positive := 1000000000/CLK_FREQ; 
 
@@ -69,20 +71,37 @@ signal buzzer_enable: std_logic;
 signal rd_uart, wr_uart: std_logic;
 signal w_data, r_data : std_logic_vector(7 downto 0);
 signal rx_empty: std_logic;
+signal en_motor: std_logic;
+signal direction: std_logic := '1';
+
+component pmod_step_interface
+port (
+   clk : in std_logic;
+   rst: in std_logic;
+   direction: in std_logic;
+   en:  in std_logic;
+   signal_out:  out std_logic_vector(3 downto 0)
+);
+end component pmod_step_interface;
 
 
 begin
+
+
+MOTOR: pmod_step_interface
+port map(clk => clk, rst => rst, en => en_motor, signal_out => motor_out, direction => direction);
+
 
 FSM_A: entity work.fsm(Behavioral)
 port map(clk => clk, rst => rst,start_bt => start,flag_char =>flag,in_char => key_char,
         line1 => line1_buffer, line2 => line2_buffer, password => password, buzzer => buzzer_enable,
         rd_uart => rd_uart, wr_uart => wr_uart, empty_uart => rx_empty, get_data_uart => r_data,
-        send_data_uart => w_data );
+        send_data_uart => w_data, en_motor => en_motor );
 
 keypadMat: entity work.keypad_top(Behavioral)
 generic map(FREQ_CLK => CLK_FREQ)
 port map(clk => clk, rst => rst,columns => columns, rows => rows, flagNewChar => flag,
-key_out => key_char);
+key_out => key_char, t => fl);
 
 UART1: entity work.uart(str_Behavioral)
 generic map( FIFO_W => 1)
